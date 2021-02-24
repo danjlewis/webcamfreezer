@@ -6,7 +6,7 @@ import numpy as np
 import time
 import multiprocessing as mp
 
-VERSION = '1.1.1'
+VERSION = '1.1.2'
 
 DEFAULTS = {'fps': 30, 'width': 1280, 'height': 720, 'cam_index': 0}
 
@@ -14,7 +14,7 @@ ID_INSTRUCTIONS_PATH = 'id_instructions.png'
 ID_INSTRUCTIONS_IMAGE = cv2.imread(ID_INSTRUCTIONS_PATH)
 
 FREEZE_HOTKEY = 'right shift'
-LOOP_HOTKEY = 'right ctrl'
+LOOP_HOTKEY = 'f17'
 PREVIEW_HOTKEY = 'alt gr'
 HOTKEY_STATUS = {'freeze': False, 'loop': False, 'preview': False}
 
