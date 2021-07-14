@@ -8,14 +8,11 @@ import multiprocessing as mp
 
 VERSION = '1.1.2'
 
-DEFAULTS = {'fps': 30, 'width': 1280, 'height': 720, 'cam_index': 0}
+DEFAULTS = {'freeze_hotkey': 'f13', 'loop_hotkey': 'f14', 'preview_hotkey': 'f15', 'fps': 30, 'width': 1280, 'height': 720, 'cam_index': 0}
 
 ID_INSTRUCTIONS_PATH = 'id_instructions.png'
 ID_INSTRUCTIONS_IMAGE = cv2.imread(ID_INSTRUCTIONS_PATH)
 
-FREEZE_HOTKEY = 'right shift'
-LOOP_HOTKEY = 'f17'
-PREVIEW_HOTKEY = 'alt gr'
 HOTKEY_STATUS = {'freeze': False, 'loop': False, 'preview': False}
 
 def verify(value, parsing_func, fail_callback = None):
@@ -84,6 +81,18 @@ if __name__ == '__main__':
     print(f"WebcamFreezer v{VERSION}")
     print("If you don't type anything for an option, a suitable default value will be chosen for you. If you don't know what to put, these are usually a good bet!", end = '\n\n')
 
+    freeze_hotkey = input("What key should trigger a freeze? ")
+    if freeze_hotkey == '':
+        freeze_hotkey = DEFAULTS['freeze_hotkey']
+
+    loop_hotkey = input("What key should trigger a loop? ")
+    if loop_hotkey == '':
+        loop_hotkey = DEFAULTS['loop_hotkey']
+
+    preview_hotkey = input("What key should trigger a preview? ")
+    if preview_hotkey == '':
+        preview_hotkey = DEFAULTS['preview_hotkey']
+    
     fps = input("What FPS should the virtual camera run at (30 FPS recommended)? ")
     if fps == '':
         fps = DEFAULTS['fps']
@@ -146,22 +155,22 @@ if __name__ == '__main__':
     with pyvirtualcam.Camera(width = width, height = height, fps = fps) as virtualcam:
         update_img()
         while True:
-            if not HOTKEY_STATUS['freeze'] and keyboard.is_pressed(FREEZE_HOTKEY):
+            if not HOTKEY_STATUS['freeze'] and keyboard.is_pressed(freeze_hotkey):
                 toggle_freeze()
-            if not HOTKEY_STATUS['loop'] and keyboard.is_pressed(LOOP_HOTKEY):
+            if not HOTKEY_STATUS['loop'] and keyboard.is_pressed(loop_hotkey):
                 toggle_loop()
-            if not HOTKEY_STATUS['preview'] and keyboard.is_pressed(PREVIEW_HOTKEY):
+            if not HOTKEY_STATUS['preview'] and keyboard.is_pressed(preview_hotkey):
                 toggle_preview()
 
-            HOTKEY_STATUS = {'freeze': keyboard.is_pressed(FREEZE_HOTKEY),
-                                'loop': keyboard.is_pressed(LOOP_HOTKEY),
-                                'preview': keyboard.is_pressed(PREVIEW_HOTKEY)}
+            HOTKEY_STATUS = {'freeze': keyboard.is_pressed(freeze_hotkey),
+                                'loop': keyboard.is_pressed(loop_hotkey),
+                                'preview': keyboard.is_pressed(preview_hotkey)}
 
             if not frozen:
                 update_img()
             
             if looping:
-                if keyboard.is_pressed(LOOP_HOTKEY):
+                if HOTKEY_STATUS['loop']:
                     clip.append(img)
                 else:
                     if clip != []:
